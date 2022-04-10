@@ -5,3 +5,5 @@
 
 ### Archway
 `wget -q -O archway.sh https://raw.githubusercontent.com/thlinhit/devtest-node/main/archway/archway.sh && chmod +x archway.sh && sudo /bin/bash archway.sh`
+NODE=LinhArchway
+WALLET=LinhWallet
