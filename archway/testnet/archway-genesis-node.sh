@@ -1,11 +1,13 @@
 #!/bin/bash
 
+# ARCHWAY_CHAIN="torii-1"
 ARCHWAY_CHAIN="augusta-1"
 ARCHWAY_MONIKER="LinhArchway"
 ARCHWAY_WALLET="LinhWallet" 
+HOMEDIR=~/.archway
 
-# "https://rpc.augusta-1.archway.tech/genesis"
-GENESIS_URL="https://api.nodes.guru/archway_genesis.json"
+# GENESIS_URL="https://github.com/archway-network/testnets/blob/torii/penultimate_genesis.json"
+GENESIS_URL="https://rpc.augusta-1.archway.tech/genesis"
 
 
 exists()
@@ -42,6 +44,7 @@ echo 'Configure Archway'
 echo 'export ARCHWAY_CHAIN='${ARCHWAY_CHAIN} >> $HOME/.bash_profile
 echo 'export ARCHWAY_MONIKER='${ARCHWAY_MONIKER} >> $HOME/.bash_profile
 echo 'export ARCHWAY_WALLET='${ARCHWAY_WALLET} >> $HOME/.bash_profile
+echo 'export HOMEDIR='${HOMEDIR} >> $HOME/.bash_profile
 source $HOME/.bash_profile
 sleep 2
 
@@ -65,7 +68,16 @@ sed -i.bak -e "s/prometheus = false/prometheus = true/" $HOME/.archway/config/co
 
 # get genesis.json
 echo 'Download Genesis URL'
-curl -s ${GENESIS_URL} | jq '.result.genesis' > ~/.archway/config/genesis.json
+if [ "$ARCHWAY_CHAIN" = "augusta-1" ]; then
+    echo "Download genesis for chain augusta-1"
+    sleep(2)
+    curl -s ${GENESIS_URL} | jq '.result.genesis' > ~/.archway/config/genesis.json
+else
+    echo "Download genesis for chain torii"
+    sleep(2)
+    wget -q -O genesis.json ${GENESIS_URL}
+    cp genesis.json $HOMEDIR/config/genesis.json
+fi
 
 
 # config pruning
